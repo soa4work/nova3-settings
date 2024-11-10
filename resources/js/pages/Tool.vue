@@ -68,23 +68,31 @@ export default {
 </script>
 <template>
     <div>
+        <heading class="mb-6">{{ title }}</heading>
 
-        <Head :title="title === 'Nova Settings' ? title : `${title} • Nova Settings`" />
-        <Heading class="mb-6">
-            {{ title }}
-        </Heading>
+        <card class="nova-settings-form">
+            <form @submit.prevent="update">
+                <div class="panel-group">
+                    <panel
+                        v-for="(resource, index) in current_resources"
+                        :key="index"
+                        :title="resource.title"
+                        :description="resource.description"
+                        :fields="resource.fields"
+                        :errors="errors"
+                    />
+                </div>
 
-        <form autocomplete="off" @submit.prevent.stop="update" class="nova-settings-form">
-            <div class="panel-group">
-                <Panel v-for="({ fields, title, description }, index) in current_resources" :key="index" :title="title"
-                    :description="description" :fields="fields" :errors="errors" />
-            </div>
-            <div
-                class="flex mt-4 flex-col md:flex-row md:items-center justify-center md:justify-end space-y-2 md:space-y-0 md:space-x-3">
-                <button type="submit" dusk="update-button" label="Save Settings" :disabled="loading" :loading="loading">
-                    Save Settings
-                </button>
-            </div>
-        </form>
+                <div class="flex mt-4 justify-end">
+                    <button
+                        type="submit"
+                        :disabled="loading"
+                        class="btn btn-default btn-primary"
+                    >
+                        Save Settings
+                    </button>
+                </div>
+            </form>
+        </card>
     </div>
 </template>

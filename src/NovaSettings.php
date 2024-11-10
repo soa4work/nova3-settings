@@ -28,39 +28,8 @@ class NovaSettings extends Tool
      */
     public function menu(Request $request)
     {
-        $resources = settingsResources()
-            ->filter(function ($resource) use ($request) {
-                $policy = str($resource['title'])->camel()->append('::view')->toString();
-                $user = $request->user();
-                if (method_exists($user, 'can') && method_exists($user, 'roles')) {
-                    $user->loadMissing([
-                        'roles',
-                        'roles.permissions',
-                        'permissions',
-                    ]);
-                    if ($user->roles->count()) {
-                        return $request->user()->can($policy);
-                    }
-                }
-
-                return true;
-            })
-            ->pluck('group')
-            ->unique()->map(
-                fn ($group) => MenuItem::make(
-                    str($group)->title()
-                        ->when(
-                            str($group)->lower()->endsWith('settings'),
-                            fn ($title) => str($title)->replace(' settings', '')->ucfirst()->__toString()
-                        )
-                        ->append(__(' Settings'))
-                        ->__toString(),
-                    str($group)->lower()->slug()->prepend('/nova-settings/')->__toString()
-                )
-            );
-
-        return MenuSection::make(__('Nova Settings'), $resources->toArray())
-            ->collapsable()
+        return MenuSection::make('Settings')
+            ->path('/nova-settings')
             ->icon('cog');
     }
 }

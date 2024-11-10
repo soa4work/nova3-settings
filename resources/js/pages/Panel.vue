@@ -1,25 +1,28 @@
-<script setup>
-import { defineProps } from "vue"
-const props = defineProps({
+<script>
+export default {
+  props: {
     title: String,
-    description: String,
+    description: String, 
     fields: Array,
-    errors: Object,
-})
+    errors: Object
+  }
+}
 </script>
 <template>
-    <div class="panel">
-        <div class="panel-title">
-            <h2 class="text-base font-semibold leading-7">
-                {{ title }}
-            </h2>
-            <p class="mt-1 text-sm leading-6 font-thin">
-                {{ description }}
-            </p>
-        </div>
-        <Card class="panel-content">
-            <component v-for="(field, index) in fields" :index="index" :key="index" :is="`form-${field.component}`"
-                :field="field" :errors="errors" />
-        </Card>
+  <div class="panel">
+    <div class="panel-title">
+      <h3 class="text-base font-bold">{{ title }}</h3>
+      <p class="text-sm text-80">{{ description }}</p>
     </div>
+    
+    <card class="panel-content">
+      <component
+        v-for="(field, index) in fields"
+        :key="index"
+        :is="`form-${field.component}`"
+        :field="field"
+        :errors="errors"
+      />
+    </card>
+  </div>
 </template>
